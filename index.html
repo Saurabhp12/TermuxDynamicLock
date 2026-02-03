@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberMoranda | Cognitive Intrusion Defense System</title>
+    <meta name="description" content="Next-generation behavioral intrusion detection system written in Rust.">
+    
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Solid Enterprise Colors (No Transparency) */
+            --brand-primary: #0f172a;   /* Deep Navy */
+            --brand-accent: #2F5F8F;    /* Muted Blue */
+            --text-main: #f8fafc;       /* Solid White */
+            --text-muted: #94a3b8;      /* Solid Gray */
+            --bg-dark: #020617;         /* Solid Background */
+            --card-bg: #1e293b;         /* Solid Card Background */
+            --border: #334155;          /* Solid Border */
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- NAVIGATION (Solid, No Blur) --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            border-bottom: 1px solid var(--border);
+            background-color: var(--bg-dark); /* Solid Color */
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            font-weight: 800; 
+            font-size: 18px; 
+            letter-spacing: -0.5px; 
+            color: #fff;
+        }
+        .logo img {
+            height: 34px; 
+            width: auto;
+        }
+        .logo span.sub {
+            color: var(--brand-accent);
+            opacity: 1; /* Solid Opacity */
+            font-weight: 500;
+        }
+
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; margin-left: 24px; transition: color 0.2s; }
+        .nav-links a:hover { color: #fff; }
+
+        /* --- HERO SECTION (No Gradients, No Shadows) --- */
+        header.hero {
+            text-align: center;
+            padding: 80px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .hero-logo {
+            height: 72px;
+            width: auto;
+            margin-bottom: 24px;
+            /* Removed Drop Shadow */
+        }
+
+        .badge {
+            background-color: #1e293b; /* Solid Dark Blue */
+            color: #60a5fa;
+            border: 1px solid var(--border);
+            padding: 6px 16px;
+            border-radius: 4px; /* Less rounded for flat look */
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+        }
+        .hero h1 {
+            font-size: 56px;
+            line-height: 1.1;
+            font-weight: 800;
+            margin-bottom: 24px;
+            color: #ffffff; /* Solid White (No Gradient) */
+        }
+        .hero p {
+            font-size: 18px;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* --- BUTTONS (Flat) --- */
+        .btn-group { display: flex; gap: 16px; justify-content: center; }
+        .btn {
+            padding: 14px 32px;
+            border-radius: 4px; /* Less rounded */
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s;
+            font-size: 14px;
+            border: none;
+        }
+        .btn-primary {
+            background-color: var(--brand-accent);
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #3b82f6; /* Lighter Blue on Hover */
+        }
+        .btn-secondary {
+            background-color: var(--card-bg);
+            color: white;
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover {
+            background-color: var(--border);
+        }
+
+        /* --- FEATURES GRID (Flat Cards) --- */
+        .features {
+            padding: 80px 8%;
+            background-color: var(--bg-dark);
+            border-top: 1px solid var(--border);
+        }
+        .section-title { text-align: center; margin-bottom: 60px; }
+        .section-title h2 { font-size: 32px; margin-bottom: 12px; color: #fff; }
+        .section-title p { color: var(--text-muted); }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            background-color: var(--card-bg); /* Solid Color */
+            padding: 32px;
+            border-radius: 8px; /* Less rounded */
+            border: 1px solid var(--border);
+        }
+        
+        .icon {
+            width: 48px; height: 48px;
+            background-color: #0f172a; /* Solid Darker Blue */
+            color: var(--brand-accent);
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 24px;
+            border: 1px solid var(--border);
+        }
+        .card h3 { font-size: 18px; margin-bottom: 12px; color: #fff; }
+        .card p { color: var(--text-muted); font-size: 14px; }
+
+        /* --- TECH STACK (Flat Labels) --- */
+        .stack {
+            padding: 60px 20px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+        .stack-list {
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Reduced gap */
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        .stack-item { 
+            font-family: 'Roboto Mono', monospace; 
+            font-size: 13px; 
+            color: var(--text-muted); 
+            background-color: var(--card-bg); /* Solid bg */
+            border: 1px solid var(--border); 
+            padding: 8px 16px; 
+            border-radius: 4px; 
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            font-size: 14px;
+            color: var(--text-muted);
+            background-color: var(--bg-dark);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 36px; }
+            .btn-group { flex-direction: column; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">
+            <img src="assets/logo.png" alt="CyberMoranda Logo" loading="lazy">
+            <div>CYBERMORANDA <span class="sub">.CIDS</span></div>
+        </div>
+        <div class="nav-links">
+            <a href="https://github.com/SaurabhPandit-Moranda" target="_blank">GitHub Repo</a>
+            <a href="#">Documentation</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <img src="assets/logo.png" alt="CyberMoranda Logo" class="hero-logo" loading="lazy">
+        
+        <br>
+        <span class="badge">🚧 v3.6.0 MVP Under Active Development</span>
+        <h1>Cognitive Intrusion<br>Defense System</h1>
+        <p>An intelligent, behavior-based reverse proxy that detects, tarpits, and deceives attackers without relying on static signatures.</p>
+        
+        <div class="btn-group">
+            <a href="https://github.com/SaurabhPandit-Moranda" class="btn btn-primary" target="_blank">View Project on GitHub</a>
+            <a href="#" class="btn btn-secondary">Read Technical Paper</a>
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="section-title">
+            <h2>Defense Beyond Firewalls</h2>
+            <p>Built with Rust for speed, engineered for active deception.</p>
+        </div>
+        
+        <div class="grid">
+            <div class="card">
+                <div class="icon">🧠</div>
+                <h3>Behavioral Scoring</h3>
+                <p>Tracks user intent (recon, probing, attacks) over time instead of just blocking IPs. Smart decay logic restores trust for legitimate users.</p>
+            </div>
+            <div class="card">
+                <div class="icon">🐢</div>
+                <h3>Adaptive Tarpit</h3>
+                <p>Automatically slows down suspicious requests (2s-5s delay) to frustrate automated scanners and break attack timing.</p>
+            </div>
+            <div class="card">
+                <div class="icon">🎭</div>
+                <h3>Active Deception</h3>
+                <p>Serves realistic fake admin panels and hidden honeypots (Decoy vs Real architecture) to waste attacker time and gather intel.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="stack">
+        <p style="text-transform: uppercase; font-size: 11px; letter-spacing: 1px; color: var(--text-muted); font-weight: 700;">Powered By Rust Ecosystem</p>
+        <div class="stack-list">
+            <div class="stack-item">TOKIO ASYNC</div>
+            <div class="stack-item">HYPER / AXUM</div>
+            <div class="stack-item">BEHAVIORAL ENGINE</div>
+            <div class="stack-item">MITRE ATT&CK</div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 CyberMoranda Research. Built by <strong>Saurabh Pandit (Moranda)</strong>.</p>
+        <p style="font-size: 12px; margin-top: 8px; opacity: 0.5;">Designed for Imagine Cup & Defensive Security Research.</p>
+    </footer>
+
+</body>
+</html>
